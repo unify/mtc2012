@@ -1,0 +1,6 @@
+{
+    "name": "mtc2012",
+    "kind" : "full",
+    "package" : "",
+    "requires" : [ { "source" : "https://github.com/unify/unify.git", "version" : "refs/tags/3-latest-stable" }, "https://github.com/zynga/apibrowser.git" ]
+}
