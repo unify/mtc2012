@@ -3,11 +3,12 @@
 # Copyright (C) 2012 Sebastian Fastner, Mainz, Germany
 
 
-NAMESPACE = "mtc2012"
+config.set("name" , "mtc2012")
+fileManager = FileManager(session)
 
 session.permutateField("debug")
 session.permutateField("es5")
-session.setField("application", NAMESPACE)
+session.setField("application", config.get("name"))
 
 @task("Clear build cache")
 def clean():
@@ -17,9 +18,9 @@ def clean():
 @task("Clear caches and build results")
 def distclean():
 	session.clean()
-	removeDir("build")
-	removeDir("external")
-	removeDir("source/script")
+	fileManager.removeDir("build")
+	fileManager.removeDir("external")
+	fileManager.removeDir("source/script")
 
 @task("Build the full api viewer into api folder")
 def api():
@@ -29,16 +30,17 @@ def api():
 
 @task("Source version")
 def source():
-	unify.unify_source(jasy.env.State, NAMESPACE)
+	unify.source(session, config)
 
 
 @task("Build version")
 def build():
-	unify.unify_build(jasy.env.State, NAMESPACE)
+	unify.build(session, config)
 
 @task
 def run():
-	serve(routes = {
+	server = Server()
+	server.setRoutes({
 		"flickr" : {
 			"debug" : True,
 			"host" : "http://query.yahooapis.com/",
@@ -46,5 +48,6 @@ def run():
 			"offline" : False
 		}
 	})
+	server.start()
 
 		
